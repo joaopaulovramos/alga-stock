@@ -6,12 +6,14 @@ import { TableHeader } from '../../shared/Table';
 import Products, { Product } from '../../shared/Table/Table.mockdata';
 import './App.css';
 import ProductForm, { ProductCreator } from './Products/ProductForm';
+import Swal from 'sweetalert2';
 
 const headers: TableHeader[] = [
-          { key: 'name', value: 'Product'},
-          { key: 'price', value: 'Price', right: true},
-          { key: 'stock', value: 'Available Stock', right: true},
-        ]
+  { key: "id", value: "#" },
+  { key: "name", value: "Product" },
+  { key: "price", value: "Price", right: true },
+  { key: "stock", value: "Available Stock", right: true },
+];
 
 function App() {
   const [products, setProducts] = useState(Products)
@@ -28,6 +30,11 @@ function App() {
     ])
   }
 
+
+  const deleteProduct = (id: number) => {
+    setProducts(products.filter(product => product.id !== 1));
+  }
+
   const handleProductUpdate = (newProduct: Product) => {
     setProducts(products.map(product =>
       product.id === newProduct.id
@@ -35,6 +42,37 @@ function App() {
       : product  
     ))
     setUpdatingProduct(undefined)
+  }
+
+  const handleProductDelete = (product: Product) => {
+    Swal.fire({
+    title: "Are you sure?",
+    text: "You won't be able to revert this!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#09f",
+    cancelButtonColor: "#d33",
+    confirmButtonText: `Yes, delete ${product.name}`,
+  }).then((result) => {
+    if (result.isConfirmed) {
+      deleteProduct(product.id)
+      Swal.fire("Deleted!", "Your file has been deleted.", "success");
+    }
+  });
+
+}
+
+  const handleProductDetail = (product: Product) => {
+    const linha = '\n'
+    Swal.fire(
+      'Product Details',
+      `${product.name}: ${linha} costs $ ${product.price} Stock: ${product.stock}`,
+      'info'
+    )
+  }
+
+  const handleProductEdit = (product: Product) => {
+    setUpdatingProduct(product)
   }
 
   return (
@@ -45,9 +83,9 @@ function App() {
         headers = {headers}
         data ={products}
         enableActions
-        onDelete={console.log}
-        onDetail={console.log}
-        onEdit={console.log}
+        onDelete={handleProductDelete}
+        onDetail={handleProductDetail}
+        onEdit={handleProductEdit}
       >
       </Table>
       <ProductForm 

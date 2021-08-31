@@ -113,7 +113,12 @@ const ProductForm: React.FC<ProductFormProps> = (props) => {
         required
         value={form.stock}
       />
-      <Button>Submit</Button>
+      <Button>
+        
+        {
+          form.id ? 'Update': 'Submit'
+        }
+      </Button>
     </Form>
   );
 };
