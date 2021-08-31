@@ -1,14 +1,15 @@
-import { faPray } from "@fortawesome/free-solid-svg-icons";
 import React, { useState } from "react";
 import Button from "../../../shared/Button";
 import Form from "../../../shared/Form";
 import Input from "../../../shared/Input";
+import { Product } from "../../../shared/Table/Table.mockdata";
 
 
-const initialFormState = {
-  name: '',
-  price: '',
-  stock: ''
+declare interface InitialFormState {
+  id?: number
+  name: string
+  price: string
+  stock: string
 }
 
 export interface ProductCreator {
@@ -18,10 +19,24 @@ export interface ProductCreator {
 }
 
 declare interface ProductFormProps {
-  onSubmit: (product: ProductCreator) => void
+  form?: Product
+  onSubmit?: (product: ProductCreator) => void
+  onUpdate?: (product: Product) => void
 }
 
 const ProductForm: React.FC<ProductFormProps> = (props) => {
+  const initialFormState: InitialFormState = props.form 
+  ?{
+    id: props.form.id,
+    name: props.form.name,
+    price: String(props.form.price),
+    stock: String(props.form.stock) 
+  }:
+  {
+    name: '',
+    price: '',
+    stock: ''
+  }
   
   const [form, setForm] = useState(initialFormState)
 
@@ -32,14 +47,33 @@ const ProductForm: React.FC<ProductFormProps> = (props) => {
       [name]: value
     })
   }
+
+  const updateProduct = (product: InitialFormState) => {
+    const productDto = {
+      id: Number(product.id),
+      name: String(product.name),
+      price: parseFloat(product.price),
+      stock: Number(product.stock)
+    }
+
+    props.onUpdate && props.onUpdate(productDto)
+  }
+
+  const createProduct = (product: InitialFormState) => {
+    const productDto = {
+      name: String(product.name),
+      price: parseFloat(product.price),
+      stock: Number(product.stock)
+    }
+
+    props.onSubmit && props.onSubmit(productDto)
+  }
   
   const handleFormSubmit = () => {
-    const productDto = {
-      name: String(form.name),
-      price: parseFloat(form.price),
-      stock: Number(form.stock)
-    }
-    props.onSubmit(productDto)
+    form.id 
+    ? updateProduct(form)
+    : createProduct(form)
+    
     setForm(initialFormState)
   }
   
