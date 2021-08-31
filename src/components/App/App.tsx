@@ -1,10 +1,11 @@
 import React from 'react';
-import Header from '../Header';
-import Container from '../shared/Container';
-import Table from '../Table';
-import { TableHeader } from '../Table';
-import Products from '../Table/Table.mockdata';
+import Header from './Header';
+import Container from '../../shared/Container';
+import Table from '../../shared/Table';
+import { TableHeader } from '../../shared/Table';
+import Products from '../../shared/Table/Table.mockdata';
 import './App.css';
+import ProductForm from './Products/ProductForm';
 
 const headers: TableHeader[] = [
           { key: 'name', value: 'Product'},
@@ -23,6 +24,7 @@ function App() {
         data ={Products}
       >
       </Table>
+      <ProductForm />
       </Container>  
     </div>
   );
