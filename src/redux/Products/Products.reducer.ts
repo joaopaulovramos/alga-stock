@@ -1,14 +1,15 @@
-import Products from "../../shared/Table/Table.mockdata"
+import { Action } from ".."
+import Products, { Product } from "../../shared/Table/Table.mockdata"
+import { fetchProducts, insertProduct } from "./Products.actions"
 
-export interface Action<T = any> {
-  type: string
-  payload?: T
-}
+
 
 // eslint-disable-next-line import/no-anonymous-default-export
-export default function (state:any = Products, action: Action): any {
+export default function (state = Products, action: Action): Product[] {
   switch(action.type){
-    case 'INSERT_NEW_PRODUCT':
+    case fetchProducts:
+      return [...action.payload]
+    case insertProduct:
       return [...state, {
         ...action.payload,
         _id: String(state.length + 1)
