@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Header from './Header';
 import Container from '../../shared/Container';
 import Table from '../../shared/Table';
 import { TableHeader } from '../../shared/Table';
-import Products, { Product } from '../../shared/Table/Table.mockdata';
 import './App.css';
 import ProductForm, { ProductCreator } from './Products/ProductForm';
 import Swal from 'sweetalert2';
+import { getAllProducts } from '../../services/Products.service';
+import { Product } from '../../shared/Table/Table.mockdata';
 
 const headers: TableHeader[] = [
   { key: "id", value: "#" },
@@ -16,13 +17,26 @@ const headers: TableHeader[] = [
 ];
 
 function App() {
-  const [products, setProducts] = useState(Products)
+  const [products, setProducts] = useState<Product[]>([])
   const [updatingProduct, setUpdatingProduct] = useState<Product | undefined>()
+  
+  useEffect(() => {
+    async function fetchData() {
+      const _products = await getAllProducts()
+      setProducts(_products)
+    }
+
+    fetchData()
+  
+  }, [])
+
+
+
   const handleProductSubmit = (product: ProductCreator) => {
     setProducts([
       ...products,
       {
-        id: products.length + 1,
+        _id: products.length.toString(),
         ...product
 
       }
@@ -30,13 +44,13 @@ function App() {
   }
 
 
-  const deleteProduct = (id: number) => {
-    setProducts(products.filter(product => product.id !== id));
+  const deleteProduct = (id: string) => {
+    setProducts(products.filter(product => product._id !== id));
   }
 
   const handleProductUpdate = (newProduct: Product) => {
     setProducts(products.map(product =>
-      product.id === newProduct.id
+      product._id === newProduct._id
       ? newProduct
       : product  
     ))
@@ -54,7 +68,7 @@ function App() {
     confirmButtonText: `Yes, delete ${product.name}`,
   }).then((result) => {
     if (result.isConfirmed) {
-      deleteProduct(product.id)
+      deleteProduct(product._id)
       Swal.fire("Deleted!", "Your file has been deleted.", "success");
     }
   });
