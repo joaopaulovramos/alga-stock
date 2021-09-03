@@ -12,6 +12,7 @@
     "allowSyntheticDefaultImports": true,
     "strictNullChecks": false,
     "strictPropertyInitialization": false,
+    "strictFunctionTypes": false,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,

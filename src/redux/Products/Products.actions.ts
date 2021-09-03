@@ -7,9 +7,7 @@ import {
   updateSingleProduct } from "../../services/Products.service"
 import { Product } from "../../shared/Table/Table.mockdata"
 
-export const insertProduct = 'INSERT_NEW_PRODUCT'
 export const fetchProducts = 'FETCH_PRODUCTS'
-
 
 export const updateProducts = 
   (newProduct: Product): Thunk<Product> =>
@@ -31,9 +29,9 @@ export const getProducts =
 
 export const insertNewProduct = 
   (product: ProductCreator): Thunk =>
-  async (disptach) => {
+  async (dispatch) => {
     await createSingleProduct(product)
-    disptach(getProducts())
+    dispatch(getProducts())
   }
 
   export const deleteProduct = 
