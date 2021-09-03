@@ -1,10 +1,22 @@
-import { Action, Thunk } from ".."
+import { Thunk } from ".."
 import { ProductCreator } from "../../components/App/Products/ProductForm"
-import { getAllProducts } from "../../services/Products.service"
+import { 
+  createSingleProduct, 
+  deleteSingleProduct, 
+  getAllProducts, 
+  updateSingleProduct } from "../../services/Products.service"
 import { Product } from "../../shared/Table/Table.mockdata"
 
 export const insertProduct = 'INSERT_NEW_PRODUCT'
 export const fetchProducts = 'FETCH_PRODUCTS'
+
+
+export const updateProducts = 
+  (newProduct: Product): Thunk<Product> =>
+    async (dispatch) => {
+      await updateSingleProduct(newProduct)
+      dispatch(getProducts)
+    }
 
 export const getProducts = 
   (): Thunk<Product[]> => 
@@ -17,9 +29,16 @@ export const getProducts =
   }
 
 
-export const insertNewProduct = (payload: ProductCreator): Action<ProductCreator> => {
-  return {
-    type: insertProduct,
-    payload
+export const insertNewProduct = 
+  (product: ProductCreator): Thunk =>
+  async (disptach) => {
+    await createSingleProduct(product)
+    disptach(getProducts())
   }
-}
+
+  export const deleteProduct = 
+    (productId: string): Thunk =>
+    async(dispatch) => {
+      await deleteSingleProduct(productId)
+      dispatch(getProducts())
+    }

@@ -2,14 +2,13 @@ import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { 
   deleteSingleProduct,
-  updateSingleProduct
-
 } from "../../../services/Products.service";
 import Table, { TableHeader } from "../../../shared/Table";
 import { Product } from "../../../shared/Table/Table.mockdata";
 import ProductForm, { ProductCreator } from "./ProductForm";
 import { connect, useDispatch } from "react-redux";
-import { getProducts, insertNewProduct } from "../../../redux/Products/Products.actions";
+import  * as ProductsAction from "../../../redux/Products/Products.actions";
+import { RootState } from "../../../redux";
 
 const headers: TableHeader[] = [
   { key: "name", value: "Product" },
@@ -29,7 +28,7 @@ const ProductsCRUD: React.FC<ProductsCRUDProps> = (props) => {
 
   async function fetchData() {
     try {
-      await dispatch(getProducts())
+      await dispatch(ProductsAction.getProducts())
     } catch (error: any) {
       Swal.fire('Oops!', error.message, 'error')
     }
@@ -43,8 +42,7 @@ const ProductsCRUD: React.FC<ProductsCRUDProps> = (props) => {
 
   const handleProductSubmit = async (product: ProductCreator) => {
     try {
-      dispatch(insertNewProduct(product))
-      fetchData();
+      dispatch(ProductsAction.insertNewProduct(product))
     } catch (err: any) {
       Swal.fire("Oops!!", err.message, "error");
     }
@@ -62,9 +60,8 @@ const ProductsCRUD: React.FC<ProductsCRUDProps> = (props) => {
 
   const handleProductUpdate = async (newProduct: Product) => {
     try {
-      await updateSingleProduct(newProduct);
+      await dispatch(ProductsAction.updateProducts(newProduct))
       setUpdatingProduct(undefined);
-      fetchData();
     } catch (err: any) {
       Swal.fire("Oops!!", err.message, "error");
     }
@@ -118,7 +115,7 @@ const ProductsCRUD: React.FC<ProductsCRUDProps> = (props) => {
   );
 }
 
-const mapStateToProps = (state: any) => ({
+const mapStateToProps = (state: RootState) => ({
   products: state.products
 })
 
