@@ -19,7 +19,6 @@ export default function organizeData(data: any[], headers: TableHeader[]):
       ...header
     }
   })
-  
   const headerKeysInOrder = Object.keys(indexedHeaders)
   const organizedData = data.map(item => {
     const organizedItem: OrganizedItem = {}

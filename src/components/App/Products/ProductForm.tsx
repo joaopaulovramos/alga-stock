@@ -41,8 +41,7 @@ const ProductForm: React.FC<ProductFormProps> = (props) => {
   const [form, setForm] = useState(initialFormState)
 
   useEffect(() => {
-    const formInit = initialFormState
-    setForm(formInit)
+    setForm(initialFormState);
     }, [props.form])
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
